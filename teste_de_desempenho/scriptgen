@@ -1,0 +1,13 @@
+#!/bin/bash
+t=0
+t1=0
+t2=0
+gcc main.c -o main -lm
+mkdir testes
+for j in {1..100}
+do
+	for i in {1..10}
+	do
+		./main $((j*20)) testes/"teste $j $i.txt" $i
+	done
+done

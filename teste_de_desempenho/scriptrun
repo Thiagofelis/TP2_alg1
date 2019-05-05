@@ -1,0 +1,19 @@
+#!/bin/bash
+t=0
+t1=0
+t2=0
+rm dados.csv
+for j in {1..300}
+do
+	for i in {1..10}
+	do
+		t1="$(date +%s%N)"
+		./tp2 "testes/teste $j $i.txt"
+		t2="$(date +%s%N)"
+		printf " "
+		t=$((t2 - t1))
+		printf "$t," >> dados.csv
+	done
+	printf "\n" >> dados.csv
+done
+

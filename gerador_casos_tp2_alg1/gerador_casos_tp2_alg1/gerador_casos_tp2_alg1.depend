@@ -1,0 +1,6 @@
+# depslib dependency file v1.0
+1556979187 source:d:\codeblocks projects\gerador_casos_tp2_alg1\gerador_casos_tp2_alg1\main.c
+	<stdio.h>
+	<stdlib.h>
+	<time.h>
+
