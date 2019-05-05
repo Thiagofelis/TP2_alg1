@@ -3,7 +3,7 @@ t=0
 t1=0
 t2=0
 rm dados.csv
-for j in {1..300}
+for j in {1..100}
 do
 	for i in {1..10}
 	do
