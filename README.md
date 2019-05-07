@@ -1,0 +1,2 @@
+# TP2_alg1
+Na pasta teste_de_desempenho pode-se encontrar todos os resultados da avaliação experimental. No arquivo dados.csv encontra-se na linha i os tempos de execução (em ns) das 10 iterações feitas com o número de vértices igual a i * 20. No arquivo out.csv encontra-se na linha i (na ordem a seguir), a média, o desvio padrão e o desvio padrão percentual dos tempos de execução com o número de vértices igual a i * 20.
