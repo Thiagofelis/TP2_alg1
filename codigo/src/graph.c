@@ -55,6 +55,22 @@ void graph_print(graph *gp)
     }
 }
 
+int graph_getNumEdges(graph *gp)
+{
+    int i;
+    int num_edges = 0;
+    for (i = 0; i < gp->num_v; i++)
+    {
+        edge* temp = ((gp->adj_list)[i])->next;
+        while (temp != 0)
+        {
+            num_edges++;
+            temp = temp->next;
+        }
+    }
+    return num_edges / 2;
+}
+
 edge_array* graph_getWeights(graph *gp)
 {
     int vec_size = ((float)(gp->num_v) * (float)(gp->num_v - 1)) / 2;
@@ -321,52 +337,34 @@ int graph_isConnected(graph* gp, int *connected)
 
 int graph_findBERecursive(graph* gp)
 {
-
     edge_array *weights = graph_getWeights(gp);
     int median = selectElement(weights->array_pointer, weights->array_size, weights->array_size / 2);
 
     graph *new_gp = (graph*) malloc(sizeof(graph));
 
     *new_gp = graph_duplicateGraph(gp);
+    free(weights);
 
-    /*  -------------------------------------------  */
-    // the motivation for the following code is rather complicated, so
-    // we explain it here. if we remove the edges greater than the median, then, if there's no
-    // edge greater then the median, we end up not removing any edges. if we remove the
-    // edges greater or equal to the median, then we risk removing all the edges, as it's
-    // also possible that there's no edge smaller then the median. therefore, we need to check if
-    // there is a smaller edge than the median. if that's the case, we can also remove all the edges
-    // equal to the median. otherwise, we leave the edges equal to the median in the graph,
-    // so we do not end with and edgeless graph.
+    int old_num_edges = graph_getNumEdges(new_gp);
 
-	// we need to call graph_getWeights again because the 
-	// function selectElement frees the vector from the heap
-	free(weights);
-	weights = graph_getWeights(gp);
-	
-    int i;
-    int median_is_the_smaller_edge = 1;
-    for (i = 0; i < weights->array_size; i++)
-    {
-        if (weights->array_pointer[i] < median)
-        {
-            median_is_the_smaller_edge = 0;
-            break;
+    graph_removeGreaterThen(new_gp, median);
+
+    int old_num_edges_2 = graph_getNumEdges(new_gp);
+
+    if (old_num_edges == old_num_edges_2)
+    { // then there's no edge greater then the median.
+      // therefore, we now remove the edges equal to the median.
+        graph_removeGreaterThenOrEqual(new_gp, median);
+
+        if (graph_getNumEdges(new_gp) == 0)
+        { // there's no edges left, so all the edges were equal to the median
+            graph_deleteGraph(new_gp);
+            free(new_gp);
+            graph_deleteGraph(gp);
+            free(gp);
+            return median;
         }
     }
-    if (median_is_the_smaller_edge)
-    {
-        graph_removeGreaterThen(new_gp, median);
-    }
-    else
-    {
-        graph_removeGreaterThenOrEqual(new_gp, median);
-    }
-
-    /*  -------------------------------------------  */
-	
-    free(weights->array_pointer);
-    free(weights);
 	
     int *connected = graph_getConnectedComponents(new_gp);
     int is_connected = graph_isConnected(new_gp, connected);

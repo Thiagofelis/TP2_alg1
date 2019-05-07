@@ -3,17 +3,19 @@ t=0
 t1=0
 t2=0
 rm dados.csv
+rm saidas.csv
 for j in {1..100}
 do
 	for i in {1..10}
 	do
+		printf "iteracao $i do teste $j\n" 
 		t1="$(date +%s%N)"
-		./tp2 "testes/teste $j $i.txt"
+		./tp2 "testes/teste $j $i.txt" >> saidas.csv
 		t2="$(date +%s%N)"
-		printf " "
+		printf "," >> saidas.csv
 		t=$((t2 - t1))
 		printf "$t," >> dados.csv
 	done
+	printf "\n" >> saidas.csv
 	printf "\n" >> dados.csv
 done
-

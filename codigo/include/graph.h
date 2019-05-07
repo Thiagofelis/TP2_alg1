@@ -34,6 +34,8 @@ void graph_print(graph *gp);
 
 graph graph_duplicateGraph(graph *gp);
 
+int graph_getNumEdges(graph *gp);
+
 void graph_removeGreaterThenOrEqual(graph *gp, int w);
 
 void graph_removeGreaterThen(graph *gp, int w);
